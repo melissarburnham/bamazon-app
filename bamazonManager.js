@@ -46,7 +46,7 @@ function start(){
           break;
   
         case "Add to Inventory":
-          addInventory();
+          pickProduct();
           break;
   
         case "Add New Product":
@@ -74,14 +74,78 @@ function start(){
     })
   }
 
-  function addInventory(){
-    console.log("Add inventory working."); 
-    start();
+  // function addInventory(){
+  //   console.log("Add inventory working."); 
+  //   start();
        
+  // }
+
+
+  function pickProduct() {
+    let query = "SELECT item_id, product_name, price, stock_quantity FROM products";  
+    connection.query(query, function(err, results){
+      if (err) throw err;
+      console.table(results);
+    })
+    
+    connection.query("SELECT * FROM products", function(err, results) {
+      if (err) throw err;  
+      inquirer
+        .prompt([
+          {
+            name: "itemChoice",
+            type: "input",
+            message: "To which product do you want to add inventory? (enter item_id)",
+            validate: function(value) {
+                if (isNaN(value) === false) {
+                  return true;
+                }
+                return false;
+              }
+            },
+            {
+              name: "quantity",
+              type: "input",
+              message: "How much do you want to add?",
+              validate: function(value) {
+                if (isNaN(value) === false) {
+                  return true;
+                }
+                return false;
+              }
+            }
+          ])
+        .then(function(answer) {
+          let newQuantity = parseInt(answer.quantity) + parseInt(answer.itemChoice.stock_quantity);
+          addInventory(answer.itemChoice, newQuantity)
+        });  
+    });          
   }
+  
+  function addInventory(item, newQuantity) {
+    console.log("Updating quantity...\n");
+    var query = connection.query(
+      "UPDATE products SET stock_quantity = ? where item_id = ?",
+
+      [
+      {
+       newQuantity
+      },
+      {
+       item
+      }
+      ],
+      function(err, res) {
+        if (err) throw err;
+        console.log(res.affectedRows + " rows updated!\n");
+        // Call updateProduct AFTER the INSERT completes
+        start();
+      }
+    );
+  }
+
 
   function addProduct(){
     console.log("Add products working");
-    start();
-        
+    start(); 
   }

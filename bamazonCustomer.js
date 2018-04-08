@@ -1,21 +1,26 @@
-const mysql = require("mysql");
-const inquirer = require("inquirer");
-let chosentItem;
+require("dotenv").config();
+let keys = require("./keys.js");
+let mysql = require("mysql");
+let inquirer = require("inquirer");
+
+
 
 // / create the connection information for the sql database
 let connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
   user: "root",
-  password: "",
+  password: keys.mysql.password,
   database: "bamazon_db"
 });
 
+//if connection works, run start function
 connection.connect(function(err) {
     if (err) throw err;
     start();
   });
 
+  //prompts user to shop at bamazon
 function start(){
   inquirer
     .prompt({
@@ -75,29 +80,53 @@ function itemToBuy(){
             }
           ])
         .then(function(answer) {
-          results.forEach(function(res){
-              if(res.item_id == answer.itemChoice){
-                  chosentItem = res;
-              }
-          });
-          if(chosentItem.stock_quantity < parseInt(answer.quantity)){
-            //   connection.query(
-            console.log("Not enough in stock!")
-            itemToBuy();
-            //   );
-          }
+          stockCheck(answer.itemChoice, answer.quantity)
         });  
     });          
 }
+function stockCheck(item, quantity){
+    connection.query("SELECT * FROM products", function(err, res){
+      if(err)throw err;
+      if(res[item-1].stock_quantity < parseInt(quantity)){
+        console.log("Not enough in stock!")
+        itemToBuy();
+      } else {
+          console.log("we have enough!");
+          showTotal(item, quantity);
+      }
+    });
+}
+function showTotal(item, quantity){
+    connection.query("SELECT * FROM products", function(err, res){
+        if(err)throw err;
+        let quantityInStock = res[item - 1].stock_quantity;
+		let newQuantity = quantityInStock - quantity;
+		let priceOfItem = res[item - 1].price;
+		let amountOwed = priceOfItem * quantity;
+		console.log("\nYou owe $" + amountOwed + ". You can send credit card info to Melissa Burnham ;)");
+		updateTable(item, newQuantity);
+    })
+}  
+
+function updateTable(item, newQuantity){
+    console.log("Updating stock!");
+    var query = connection.query(
+      "UPDATE products SET ? WHERE ?",
+      [
+        {
+          stock_quantity: newQuantity
+        },
+        {
+          item_id: item
+        }
+      ],
+      function(err, res) {
+        console.log(res.affectedRows + " products updated!\n");
+        start();
+      }
+    );
+  }
 
 
-// choices: function (){
-//     var choiceArray= [];
-//     results.forEach(function(res){
-//       choiceArray.push(res.item_id + " | " + res.product_name + " | " + res.price);        
-//     })
-//     return choiceArray;
-//     }
-    
   
 

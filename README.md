@@ -11,3 +11,9 @@ Javscript <br>
 node.js<br>
 MySQL <br>
 npm packages: mySQL, inquirer, console.table, colors, dotenv
+
+## bamazonCustomer.js
+
+![alt text][photo]
+
+[photo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"

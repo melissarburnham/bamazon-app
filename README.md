@@ -10,4 +10,4 @@ Supervisors can view sales by department and add new departments. <br>
 Javscript <br>
 node.js<br>
 MySQL <br>
-npm packages: mySQL, inquirer, console.table
+npm packages: mySQL, inquirer, console.table, colors, dotenv

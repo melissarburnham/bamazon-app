@@ -1,7 +1,8 @@
 require("dotenv").config();
-let keys = require("./keys.js");
-let mysql = require("mysql");
-let inquirer = require("inquirer");
+const keys = require("./keys.js");
+const mysql = require("mysql");
+const inquirer = require("inquirer");
+const cTable = require('console.table');
 
 
 
@@ -58,11 +59,14 @@ function start(){
   function viewProducts(){
     let query = "SELECT item_id, product_name, price, stock_quantity FROM products";  
     connection.query(query, function(err, results){
-      results.forEach(res => {
-        console.log("\n" + res.item_id + "|" + res.product_name + "|" + res.price + "|" + res.stock_quantity);
-      });
+      if (err) throw err;
+      console.table(results);
+      
+      // results.forEach(res => {
+        // console.log("\n" + res.item_id + "|" + res.product_name + "|" + res.price + "|" + res.stock_quantity);
+      // });
+      start();
     })
-    start();
   }
 
   function lowInventory(){

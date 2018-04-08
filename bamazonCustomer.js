@@ -1,7 +1,9 @@
 require("dotenv").config();
-let keys = require("./keys.js");
-let mysql = require("mysql");
-let inquirer = require("inquirer");
+const keys = require("./keys.js");
+const mysql = require("mysql");
+const inquirer = require("inquirer");
+const cTable = require('console.table');
+const colors = require('colors');
 
 
 
@@ -35,19 +37,18 @@ function start(){
       displayAll();
       }
       else {
-      console.log("Well, then why are you here?")
+      console.log("Well, then why are you here?".red)
       start();
       }
     });
 }
 
 function displayAll(){
-  connection.query("SELECT * FROM products", function(err, results) {
-    results.forEach(function(res){
-        console.log(res.item_id + " | " + res.product_name + " | " + res.price);        
-    })
-      console.log("-----------------------------------");
-      itemToBuy();
+  let query = "SELECT product_name, price, stock_quantity FROM products"
+  connection.query(query, function(err, results) {
+    console.table(results);        
+    console.log("-----------------------------------");
+    itemToBuy();
     });
   }
 

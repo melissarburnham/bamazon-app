@@ -3,6 +3,7 @@ const keys = require("./keys.js");
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require('console.table');
+const colors = require('colors');
 let chosenItem;
 
 

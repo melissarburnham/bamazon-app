@@ -5,8 +5,6 @@ const inquirer = require("inquirer");
 const cTable = require('console.table');
 const colors = require('colors');
 
-
-
 // / create the connection information for the sql database
 let connection = mysql.createConnection({
   host: "localhost",
@@ -28,7 +26,7 @@ function start(){
     .prompt({
       name: "goShopping",
       type: "rawlist",
-      message: "Would you like to got shopping at bamazon?",
+      message: "Would you like to got shopping at bamazon?".blue,
       choices: ["YES", "NO"]
     })
     .then(function(answer) {
@@ -37,14 +35,14 @@ function start(){
       displayAll();
       }
       else {
-      console.log("Well, then why are you here?".red)
+      console.log("Well, then why are you here?".red);
       start();
       }
     });
 }
 
 function displayAll(){
-  let query = "SELECT product_name, price, stock_quantity FROM products"
+  let query = "SELECT item_id, product_name, price, stock_quantity FROM products"
   connection.query(query, function(err, results) {
     console.table(results);        
     console.log("-----------------------------------");
@@ -60,7 +58,7 @@ function itemToBuy(){
           {
             name: "itemChoice",
             type: "input",
-            message: "What item would you like to buy? (Enter id number)",
+            message: "Enter the ID of the product you would like to buy.".blue,
             validate: function(value) {
                 if (isNaN(value) === false) {
                   return true;
@@ -71,7 +69,7 @@ function itemToBuy(){
             {
               name: "quantity",
               type: "input",
-              message: "Enter the quantity you wish to buy.",
+              message: "Enter the quantity you wish to buy.".blue,
               validate: function(value) {
                 if (isNaN(value) === false) {
                   return true;
@@ -90,10 +88,10 @@ function stockCheck(item, quantity){
     connection.query("SELECT * FROM products", function(err, res){
       if(err)throw err;
       if(res[item-1].stock_quantity < parseInt(quantity)){
-        console.log("Not enough in stock!")
+        console.log("Not enough in stock!".red)
         itemToBuy();
       } else {
-          console.log("we have enough!");
+          console.log("we have enough!".green);
           showTotal(item, quantity);
       }
     });
@@ -106,13 +104,13 @@ function showTotal(item, quantity){
 		let newQuantity = quantityInStock - quantity;
 		let priceOfItem = res[item - 1].price;
 		let amountOwed = priceOfItem * quantity;
-		console.log("\nYou owe $" + amountOwed + ". You can send credit card info to Melissa Burnham ;)");
+		console.log("\nYou owe ".green +"$" + amountOwed + ". You can send credit card info to Melissa Burnham ;)".green);
 		updateTable(item, newQuantity);
     })
 }  
 
 function updateTable(item, newQuantity){
-    console.log("Updating stock!");
+    console.log("Updating stock!".magenta);
     var query = connection.query(
       "UPDATE products SET ? WHERE ?",
       [
@@ -124,7 +122,7 @@ function updateTable(item, newQuantity){
         }
       ],
       function(err, res) {
-        console.log(res.affectedRows + " products updated!\n");
+        console.log(res.affectedRows + " product updated!\n".magenta);
         start();
       }
     );

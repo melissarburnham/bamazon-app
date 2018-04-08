@@ -4,6 +4,7 @@
   "description": "",
   "main": "bamazonCustomer.js",
   "dependencies": {
+    "cli-table": "^0.3.1",
     "colors": "^1.2.1",
     "console.table": "^0.10.0",
     "dotenv": "^5.0.1",

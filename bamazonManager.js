@@ -28,7 +28,7 @@ function start(){
     .prompt({
       name: "whatToDo",
       type: "rawlist",
-      message: "What would you like to do?",
+      message: "What would you like to do?".blue,
       choices: [
       "View Products for Sale", 
       "View Low Inventory", 
@@ -85,7 +85,7 @@ function start(){
           {
             name: "itemChoice",
             type: "input",
-            message: "To which product do you want to add inventory? (enter item_id)",
+            message: "Enter the id of the item to which you want to add inventory".blue,
             validate: function(value) {
                 if (isNaN(value) === false) {
                   return true;
@@ -96,7 +96,7 @@ function start(){
             {
               name: "quantity",
               type: "input",
-              message: "How much do you want to add?",
+              message: "How much do you want to add?".blue,
               validate: function(value) {
                 if (isNaN(value) === false) {
                   return true;
@@ -121,17 +121,10 @@ function start(){
     console.log("Updating quantity...\n");
     var query = connection.query(
       "UPDATE products SET ? WHERE ?",
-      [
-      {
-       stock_quantity: newQuantity
-      },
-      {
-       item_id: item
-      }
-      ],
+      [{ stock_quantity: newQuantity},{item_id: item}],
       function(err, res) {
         if (err) throw err;
-        console.log(res.affectedRows + " rows updated!\n");
+        console.log(res.affectedRows + " rows updated!\n".magenta);
         // Call updateProduct AFTER the INSERT completes
         start();
       }
@@ -144,17 +137,17 @@ function start(){
           {
             name: "product_name",
             type: "input",
-            message: "Type product name you wish to add.",
+            message: "Type product name you wish to add.".blue,
             },
             {
               name: "department",
               type: "input",
-              message: "Add the department name of the product.",
+              message: "Add the department name of the product.".blue,
             },
             {
             name: "price",
             type: "input",
-            message: "How much will your product cost?",
+            message: "How much will your product cost?".blue,
             validate: function(value) {
               if (isNaN(value) === false) {
                 return true;
@@ -165,7 +158,7 @@ function start(){
             {
               name: "quantity",
               type: "input",
-              message: "How many are in stock?",
+              message: "How many are in stock?".blue,
               validate: function(value) {
                 if (isNaN(value) === false) {
                   return true;
@@ -184,7 +177,7 @@ function start(){
               stock_quantity: answer.quantity
             },
             function(err, res) {
-              console.log(res.affectedRows + " product added!\n");
+              console.log(res.affectedRows + " product added!\n".magenta);
               // Call updateProduct AFTER the INSERT completes
               start();
             }

@@ -16,4 +16,12 @@ npm packages: mySQL, inquirer, console.table, colors, dotenv
 
 ![alt text][photo]
 
-[photo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
+[photo]: https://github.com/melissarburnham/bamazon-app/blob/master/images/customer.png "Customer screen"
+
+## bamazonManager.js
+
+![alt text][photo2]
+
+[photo2]: https://github.com/melissarburnham/bamazon-app/blob/master/images/manager.png "Manager screen"
+
+

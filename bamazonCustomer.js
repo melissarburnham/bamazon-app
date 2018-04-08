@@ -84,6 +84,7 @@ function itemToBuy(){
         });  
     });          
 }
+
 function stockCheck(item, quantity){
     connection.query("SELECT * FROM products", function(err, res){
       if(err)throw err;
@@ -96,6 +97,7 @@ function stockCheck(item, quantity){
       }
     });
 }
+
 function showTotal(item, quantity){
     connection.query("SELECT * FROM products", function(err, res){
         if(err)throw err;

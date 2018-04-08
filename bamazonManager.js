@@ -61,18 +61,17 @@ function start(){
     connection.query(query, function(err, results){
       if (err) throw err;
       console.table(results);
-      
-      // results.forEach(res => {
-        // console.log("\n" + res.item_id + "|" + res.product_name + "|" + res.price + "|" + res.stock_quantity);
-      // });
       start();
     })
   }
 
   function lowInventory(){
-    console.log("Low inventory working.");  
-    start();
-      
+    let query = "SELECT item_id, product_name, stock_quantity FROM products WHERE stock_quantity < 5";  
+    connection.query(query, function(err, results){
+      if (err) throw err;
+      console.table(results);
+      start();
+    })
   }
 
   function addInventory(){

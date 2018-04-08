@@ -3,7 +3,7 @@ const keys = require("./keys.js");
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require('console.table');
-
+let chosenItem;
 
 
 // / create the connection information for the sql database
@@ -82,14 +82,10 @@ function start(){
 
 
   function pickProduct() {
-    let query = "SELECT item_id, product_name, price, stock_quantity FROM products";  
+    let query = "SELECT item_id, product_name, stock_quantity FROM products";  
     connection.query(query, function(err, results){
       if (err) throw err;
-      console.table(results);
-    })
-    
-    connection.query("SELECT * FROM products", function(err, results) {
-      if (err) throw err;  
+      console.table(results);  
       inquirer
         .prompt([
           {
@@ -116,8 +112,13 @@ function start(){
             }
           ])
         .then(function(answer) {
-          let newQuantity = parseInt(answer.quantity) + parseInt(answer.itemChoice.stock_quantity);
-          addInventory(answer.itemChoice, newQuantity)
+          results.forEach(function(res){
+            if(answer.itemChoice == res.item_id){
+              chosenItem = res
+            }
+          })
+          let newQuantity = parseInt(answer.quantity) + parseInt(chosenItem.stock_quantity);
+          addInventory(chosenItem.item_id, newQuantity)
         });  
     });          
   }
@@ -125,14 +126,13 @@ function start(){
   function addInventory(item, newQuantity) {
     console.log("Updating quantity...\n");
     var query = connection.query(
-      "UPDATE products SET stock_quantity = ? where item_id = ?",
-
+      "UPDATE products SET ? WHERE ?",
       [
       {
-       newQuantity
+       stock_quantity: newQuantity
       },
       {
-       item
+       item_id: item
       }
       ],
       function(err, res) {

@@ -24,5 +24,5 @@ VALUES ('television','electronics', 500.00, 100),
 ('rattle','baby', 10.00, 100),
 ('high heels','womens clothing', 50.00, 100),
 ('blouse','womens clothing', 50.00, 100),
-('soccer','sports', 500.00, 100),
+('soccer ball','sports', 5.00, 5),
 ('cleats','sports', 500.00, 100);

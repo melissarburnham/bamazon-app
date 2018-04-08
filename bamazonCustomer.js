@@ -91,7 +91,7 @@ function stockCheck(item, quantity){
         console.log("Not enough in stock!".red)
         itemToBuy();
       } else {
-          console.log("we have enough!".green);
+          console.log("THANK YOU FOR SHOPPING WITH US!".green);
           showTotal(item, quantity);
       }
     });

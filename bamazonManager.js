@@ -50,7 +50,7 @@ function start(){
           break;
   
         case "Add New Product":
-          addProduct();
+          addInfo();
           break;
         }
       });
@@ -73,13 +73,6 @@ function start(){
       start();
     })
   }
-
-  // function addInventory(){
-  //   console.log("Add inventory working."); 
-  //   start();
-       
-  // }
-
 
   function pickProduct() {
     let query = "SELECT item_id, product_name, stock_quantity FROM products";  
@@ -144,8 +137,56 @@ function start(){
     );
   }
 
-
-  function addProduct(){
-    console.log("Add products working");
-    start(); 
+  function addInfo(){
+      inquirer
+        .prompt([
+          {
+            name: "product_name",
+            type: "input",
+            message: "Type product name you wish to add.",
+            },
+            {
+              name: "department",
+              type: "input",
+              message: "Add the department name of the product.",
+            },
+            {
+            name: "price",
+            type: "input",
+            message: "How much will your product cost?",
+            validate: function(value) {
+              if (isNaN(value) === false) {
+                return true;
+              }
+              return false;
+            }
+            },
+            {
+              name: "quantity",
+              type: "input",
+              message: "How many are in stock?",
+              validate: function(value) {
+                if (isNaN(value) === false) {
+                  return true;
+                }
+                return false;
+              }
+              }
+          ])
+        .then(function(answer) {
+          var query = connection.query(
+            "INSERT INTO products SET ?",
+            {
+              product_name: answer.product_name,
+              department_name: answer.department,
+              price: answer.price,
+              stock_quantity: answer.quantity
+            },
+            function(err, res) {
+              console.log(res.affectedRows + " product added!\n");
+              // Call updateProduct AFTER the INSERT completes
+              start();
+            }
+          );
+    });          
   }

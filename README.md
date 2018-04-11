@@ -11,3 +11,17 @@ Javscript <br>
 node.js<br>
 MySQL <br>
 npm packages: mySQL, inquirer, console.table, colors, dotenv
+
+## bamazonCustomer.js
+
+![alt text][photo]
+
+[photo]: https://github.com/melissarburnham/bamazon-app/blob/master/images/customer.png "Customer screen"
+
+## bamazonManager.js
+
+![alt text][photo2]
+
+[photo2]: https://github.com/melissarburnham/bamazon-app/blob/master/images/manager.png "Manager screen"
+
+

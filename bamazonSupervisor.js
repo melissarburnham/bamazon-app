@@ -49,12 +49,40 @@ function viewSales(){
     console.table(results);
     start();
   })
-
-
-
-
 }
 
 function createDepartment(){
-  console.log("This is working!");
+    inquirer
+      .prompt([
+        {
+          name: "department_name",
+          type: "input",
+          message: "Type department name you wish to add.".blue,
+          },
+          {
+            name: "overhead_costs",
+            type: "input",
+            message: "Enter estimated overhead costs.".blue,
+            validate: function(value) {
+              if (isNaN(value) === false) {
+                return true;
+              }
+              return false;
+            }
+          }
+        ])
+      .then(function(answer) {
+        var query = connection.query(
+          "INSERT INTO departments SET ?",
+          {
+            department_name: answer.department_name,
+            over_head_costs: answer.overhead_costs,
+          },
+          function(err, res) {
+            console.log(res.affectedRows + " product added!\n".magenta);
+            // Call updateProduct AFTER the INSERT completes
+            start();
+          }
+        );
+  });          
 }

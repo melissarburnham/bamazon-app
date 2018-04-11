@@ -99,27 +99,30 @@ function stockCheck(item, quantity){
 
 function showTotal(item, quantity){
     connection.query("SELECT * FROM products", function(err, res){
-        if(err)throw err;
-        let quantityInStock = res[item - 1].stock_quantity;
-		let newQuantity = quantityInStock - quantity;
-		let priceOfItem = res[item - 1].price;
-		let amountOwed = priceOfItem * quantity;
-		console.log("\nYou owe ".green +"$" + amountOwed + ". You can send credit card info to Melissa Burnham ;)".green);
-		updateTable(item, newQuantity);
-    })
+      if(err)throw err;
+      let quantityInStock = res[item - 1].stock_quantity;
+      let newQuantity = quantityInStock - quantity;
+      let priceOfItem = res[item - 1].price;
+      let amountOwed = priceOfItem * quantity;
+      let productSales = res[item - 1].product_sales + amountOwed;
+      console.log("\nYou owe ".green +"$" + amountOwed + 
+      ". You can send credit card info to Melissa Burnham ;)".green);
+      updateTable(item, newQuantity, productSales);
+      })
 }  
 
-function updateTable(item, newQuantity){
+function updateTable(item, newQuantity, productSales){
     console.log("Updating stock!".magenta);
     var query = connection.query(
       "UPDATE products SET ? WHERE ?",
       [
         {
-          stock_quantity: newQuantity
+          stock_quantity: newQuantity,
+          product_sales: productSales
         },
         {
           item_id: item
-        }
+        },
       ],
       function(err, res) {
         console.log(res.affectedRows + " product updated!\n".magenta);
@@ -127,7 +130,3 @@ function updateTable(item, newQuantity){
       }
     );
   }
-
-
-  
-

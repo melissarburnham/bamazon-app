@@ -58,7 +58,7 @@ function start(){
   }
 
   function viewProducts(){
-    let query = "SELECT item_id, product_name, price, stock_quantity FROM products";  
+    let query = "SELECT item_id, product_name, price, stock_quantity, product_sales FROM products";  
     connection.query(query, function(err, results){
       if (err) throw err;
       console.table(results);

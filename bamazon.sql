@@ -26,3 +26,29 @@ VALUES ('television','electronics', 500.00, 100),
 ('blouse','womens clothing', 50.00, 100),
 ('soccer ball','sports', 5.00, 5),
 ('cleats','sports', 500.00, 100);
+
+
+USE bamazon_db;
+
+
+
+DROP TABLE  IF EXISTS bamazon_db;
+CREATE TABLE  bamazon_db;
+
+CREATE TABLE departments(
+  item_id INTEGER AUTO_INCREMENT NOT NULL,
+  department_name VARCHAR(30),
+  over_head_costs DECIMAL(20,2) default 0,
+  PRIMARY KEY (item_id)
+);
+
+SELECT * FROM departments;
+
+INSERT INTO departments (department_name, over_head_costs)
+VALUES ('electronics', 5000.00),
+('furniture', 10000.00),
+('baby', 2000.00),
+('womens clothing', 5000.00),
+('sports', 5000.00);
+
+

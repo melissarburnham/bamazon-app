@@ -24,4 +24,10 @@ npm packages: mySQL, inquirer, console.table, colors, dotenv
 
 [photo2]: https://github.com/melissarburnham/bamazon-app/blob/master/images/manager.png "Manager screen"
 
+## bamazonSupervisor.js
+
+![alt text][photo3]
+
+[photo3]: https://github.com/melissarburnham/bamazon-app/blob/master/images/supervisor.png "Supervisor screen"
+
 

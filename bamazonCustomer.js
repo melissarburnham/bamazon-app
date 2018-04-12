@@ -47,86 +47,86 @@ function displayAll(){
     console.table(results);        
     console.log("-----------------------------------");
     itemToBuy();
-    });
-  }
+  });
+}
 
 function itemToBuy(){
-    connection.query("SELECT * FROM products", function(err, results) {
-      if (err) throw err;  
-      inquirer
-        .prompt([
-          {
-            name: "itemChoice",
-            type: "input",
-            message: "Enter the ID of the product you would like to buy.".blue,
-            validate: function(value) {
-                if (isNaN(value) === false) {
-                  return true;
-                }
-                return false;
+  connection.query("SELECT * FROM products", function(err, results) {
+    if (err) throw err;  
+    inquirer
+      .prompt([
+        {
+          name: "itemChoice",
+          type: "input",
+          message: "Enter the ID of the product you would like to buy.".blue,
+          validate: function(value) {
+              if (isNaN(value) === false) {
+                return true;
               }
-            },
-            {
-              name: "quantity",
-              type: "input",
-              message: "Enter the quantity you wish to buy.".blue,
-              validate: function(value) {
-                if (isNaN(value) === false) {
-                  return true;
-                }
-                return false;
-              }
+              return false;
             }
-          ])
-        .then(function(answer) {
-          stockCheck(answer.itemChoice, answer.quantity)
-        });  
-    });          
+          },
+          {
+            name: "quantity",
+            type: "input",
+            message: "Enter the quantity you wish to buy.".blue,
+            validate: function(value) {
+              if (isNaN(value) === false) {
+                return true;
+              }
+              return false;
+            }
+          }
+        ])
+      .then(function(answer) {
+        stockCheck(answer.itemChoice, answer.quantity)
+      });  
+  });          
 }
 
 function stockCheck(item, quantity){
-    connection.query("SELECT * FROM products", function(err, res){
-      if(err)throw err;
-      if(res[item-1].stock_quantity < parseInt(quantity)){
-        console.log("Not enough in stock!".red)
-        itemToBuy();
-      } else {
-          console.log("THANK YOU FOR SHOPPING WITH US!".green);
-          showTotal(item, quantity);
-      }
-    });
+  connection.query("SELECT * FROM products", function(err, res){
+    if(err)throw err;
+    if(res[item-1].stock_quantity < parseInt(quantity)){
+      console.log("Not enough in stock!".red)
+      itemToBuy();
+    } else {
+        console.log("THANK YOU FOR SHOPPING WITH US!".green);
+        showTotal(item, quantity);
+    }
+  });
 }
 
 function showTotal(item, quantity){
-    connection.query("SELECT * FROM products", function(err, res){
-      if(err)throw err;
-      let quantityInStock = res[item - 1].stock_quantity;
-      let newQuantity = quantityInStock - quantity;
-      let priceOfItem = res[item - 1].price;
-      let amountOwed = priceOfItem * quantity;
-      let productSales = res[item - 1].product_sales + amountOwed;
-      console.log("\nYou owe ".green +"$" + amountOwed + 
-      ". You can send credit card info to Melissa Burnham ;)".green);
-      updateTable(item, newQuantity, productSales);
-      })
+  connection.query("SELECT * FROM products", function(err, res){
+    if(err)throw err;
+    let quantityInStock = res[item - 1].stock_quantity;
+    let newQuantity = quantityInStock - quantity;
+    let priceOfItem = res[item - 1].price;
+    let amountOwed = priceOfItem * quantity;
+    let productSales = res[item - 1].product_sales + amountOwed;
+    console.log("\nYou owe ".green +"$" + amountOwed + 
+    ". You can send credit card info to Melissa Burnham ;)".green);
+    updateTable(item, newQuantity, productSales);
+  })
 }  
 
 function updateTable(item, newQuantity, productSales){
-    console.log("Updating stock!".magenta);
-    var query = connection.query(
-      "UPDATE products SET ? WHERE ?",
-      [
-        {
-          stock_quantity: newQuantity,
-          product_sales: productSales
-        },
-        {
-          item_id: item
-        },
-      ],
-      function(err, res) {
-        console.log(res.affectedRows + " product updated!\n".magenta);
-        start();
-      }
-    );
-  }
+  console.log("Updating stock!".magenta);
+  var query = connection.query(
+    "UPDATE products SET ? WHERE ?",
+    [
+      {
+        stock_quantity: newQuantity,
+        product_sales: productSales
+      },
+      {
+        item_id: item
+      },
+    ],
+    function(err, res) {
+      console.log(res.affectedRows + " product updated!\n".magenta);
+      start();
+    }
+  );
+}

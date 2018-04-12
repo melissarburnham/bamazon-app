@@ -17,29 +17,29 @@ let connection = mysql.createConnection({
 
 //if connection works, run start function
 connection.connect(function(err) {
-    if (err) throw err;
-    start();
-  });
+  if (err) throw err;
+  start();
+});
 
 function start(){
 inquirer
-    .prompt({
+  .prompt({
     name: "options",
     type: "rawlist",
     message: "What would you like to do?".blue,
     choices: ["View Product Sales by Department", "Create New Department"]
-    })
-    .then(function(answer) {
-      switch (answer.options) {
-        case "View Product Sales by Department":
-          viewSales();
-          break;
-  
-        case "Create New Department":
-          createDepartment();
-          break;
-    }
-    });
+  })
+  .then(function(answer) {
+    switch (answer.options) {
+      case "View Product Sales by Department":
+        viewSales();
+        break;
+
+      case "Create New Department":
+        createDepartment();
+        break;
+     }
+  });
 }
 
 function viewSales(){
@@ -52,37 +52,37 @@ function viewSales(){
 }
 
 function createDepartment(){
-    inquirer
-      .prompt([
+  inquirer
+    .prompt([
+      {
+        name: "department_name",
+        type: "input",
+        message: "Type department name you wish to add.".blue,
+        },
         {
-          name: "department_name",
-          type: "input",
-          message: "Type department name you wish to add.".blue,
-          },
-          {
-            name: "overhead_costs",
-            type: "input",
-            message: "Enter estimated overhead costs.".blue,
-            validate: function(value) {
-              if (isNaN(value) === false) {
-                return true;
-              }
-              return false;
-            }
+        name: "overhead_costs",
+        type: "input",
+        message: "Enter estimated overhead costs.".blue,
+        validate: function(value) {
+          if (isNaN(value) === false) {
+            return true;
           }
-        ])
-      .then(function(answer) {
-        var query = connection.query(
-          "INSERT INTO departments SET ?",
-          {
-            department_name: answer.department_name,
-            over_head_costs: answer.overhead_costs,
-          },
-          function(err, res) {
-            console.log(res.affectedRows + " product added!\n".magenta);
-            // Call updateProduct AFTER the INSERT completes
-            start();
-          }
-        );
+          return false;
+        }
+        }
+      ])
+    .then(function(answer) {
+      var query = connection.query(
+        "INSERT INTO departments SET ?",
+        {
+          department_name: answer.department_name,
+          over_head_costs: answer.overhead_costs,
+        },
+        function(err, res) {
+          console.log(res.affectedRows + " product added!\n".magenta);
+          // Call updateProduct AFTER the INSERT completes
+          start();
+        }
+      );
   });          
 }
